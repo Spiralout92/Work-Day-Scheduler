@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,6 +23,7 @@
     <title>Work Day Scheduler</title>
   </head>
 
+
   <body>
     <header class="jumbotron">
       <h1 class="display-3">Work Day Scheduler</h1>
@@ -30,7 +32,6 @@
       
     </header>
     
-
     <div class="container">
 
       <div class="row time-block" data-hour= "9">
@@ -92,96 +93,88 @@
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
-    <script>
+
+  <script>
       
-      var timeDay = moment().format('dddd LL');
+    var timeDay = moment().format('dddd LL');
 
-      var blockTime = $(".time-block");
+    var blockTime = $(".time-block");
 
-      var hrCurrent = moment().format("H"); 
+    var hrCurrent = moment().format("H"); 
       
-      
-      var toDoItems = [];
+    var toDoItems = [];
 
-      function coloredEvents() {
-        blockTime.each(function() {
-          var thisBlock = $(this);
-          var thisHour = parseInt(thisBlock.attr("data-hour"));
+    function coloredEvents() {
+      blockTime.each(function() {
+      var thisBlock = $(this);
+      var thisHour = parseInt(thisBlock.attr("data-hour"));
 
-          if(thisHour < hrCurrent) {
-            thisBlock.addClass("past").removeClass("present future");
-          }
+      if(thisHour < hrCurrent) {
+      thisBlock.addClass("past").removeClass("present future");
+        }
 
-          if(thisHour == hrCurrent) {
-            thisBlock.addClass("present").removeClass("past future");
-          }
+     if(thisHour == hrCurrent) {
+        thisBlock.addClass("present").removeClass("past future");
+        }
 
-          if(thisHour > hrCurrent) {
-            thisBlock.addClass("future").removeClass("present past");
-          }
+      if(thisHour > hrCurrent) {
+        thisBlock.addClass("future").removeClass("present past");
+        }
         });
       }
 
 
+    function startSched() {
 
+      blockTime.each(function(){
+      var thisTime = $(this);
+      var thisTimeHr = parseInt(thisTime.attr("data-hour"));
 
-      
+      var schedObj = {
 
-      function startSched() {
+      hour: thisTimeHr,
+      text: "",
+      }
 
-        blockTime.each(function(){
-          var thisTime = $(this);
-          var thisTimeHr = parseInt(thisTime.attr("data-hour"));
+      toDoItems.push(schedObj);
 
-          var schedObj = {
+      });
 
-            hour: thisTimeHr,
-
-            text: "",
-          }
-
-          toDoItems.push(schedObj);
-
-
-        });
-
-        localStorage.setItem("todos", JSON.stringify(toDoItems));
-
+      localStorage.setItem("todos", JSON.stringify(toDoItems));
       }
 
 
-      function schedRender() {
-        toDoItems = localStorage.getItem("todos");
-        toDoItems = JSON.parse(toDoItems);
+    function schedRender() {
+      toDoItems = localStorage.getItem("todos");
+      toDoItems = JSON.parse(toDoItems);
 
-        for (var i = 0; i < toDoItems.length; i++){
-          var itemHr = toDoItems[i].hour;
-          var itemText = toDoItems[i].text;
+      for (var i = 0; i < toDoItems.length; i++){
+      var itemHr = toDoItems[i].hour;
+      var itemText = toDoItems[i].text;
 
-          $("[data-hour=" + itemHr + "]").children(".description").val(itemText);
-        }
+      $("[data-hour=" + itemHr + "]").children(".description").val(itemText);
+      }
       }
       
-      function saveButton() {
-        var thisBlock = $(this).parent();
-
-        var hourUpdate = $(this).parent().attr("data-hour");
-        var addItem = (($(this).parent()).children(".description")).val();
-
-        for (var r = 0; r < toDoItems.length; r++) {
-          if (toDoItems[r].hour == hourUpdate) {
-            toDoItems[r].text = addItem;
-          }
-        }
-        localStorage.setItem("todos", JSON.stringify(toDoItems));
-        schedRender();
+    function saveButton() {
+      var thisBlock = $(this).parent();
+      var hourUpdate = $(this).parent().attr("data-hour");
+      var addItem = (($(this).parent()).children(".description")).val();
+      for (var r = 0; r < toDoItems.length; r++) {
+      if (toDoItems[r].hour == hourUpdate) {
+          toDoItems[r].text = addItem;
       }
+      }
+      localStorage.setItem("todos", JSON.stringify(toDoItems));
+      schedRender();
+      }
+
 
 $(document).ready(function() {
   coloredEvents();
 
   if(!localStorage.getItem("todos")){
-    startSched();
+  startSched();
   }
 
   schedRender();
