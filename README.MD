@@ -4,8 +4,8 @@ Current author: Maintenance and further contributions are made by Christopher Go
 
 Link for deployed website: 
 
-[Website] ()
+[Website] (https://spiralout92.github.io/Work-Day-Scheduler/)
 
 Link for deployed website image: 
 
-![]()
+![Work Day Scheduler](plannerimage.png)
